@@ -4,6 +4,7 @@
 #include <functional>
 #include <string>
 #include <memory>
+#include <ostream>
 
 class Node {
     public:
@@ -25,6 +26,7 @@ class Node {
         static bool isFunction(const std::string& s);
         static bool isOperator(char c);
 
+        void printAsTree(std::ostream& out, int depth = 0);
         double eval() const;
 
     private:
@@ -46,3 +48,5 @@ class Node {
         static const std::map<char, std::function<double(double, double)>> operators;
         static const std::map<std::string, std::function<double(double)>> functions;
 };
+
+std::ostream& operator<<(std::ostream& out, const Node& node);
