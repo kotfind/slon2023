@@ -7,5 +7,5 @@ int main() {
     std::getline(std::cin, s);
     MathTree tree(s);
     std::cout << tree.toTreeString();
-    std::cout << tree.toString();
+    std::cout << tree.toString() << " = " << tree.eval() << '\n';
 }

@@ -25,6 +25,8 @@ class Node {
         static bool isFunction(const std::string& s);
         static bool isOperator(char c);
 
+        double eval() const;
+
     private:
         enum class Type {
             OPER,

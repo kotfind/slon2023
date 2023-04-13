@@ -56,3 +56,19 @@ bool Node::isFunction(const std::string& s) {
 bool Node::isOperator(char c) {
     return operators.count(c);
 }
+
+double Node::eval() const {
+    if (isFunc()) {
+        // Function
+        return functions.at(getFunc())(getLhsNode()->eval());
+    } else if (isOper()) {
+        // Operator
+        return operators.at(getOper())(
+            getLhsNode()->eval(),
+            getRhsNode()->eval()
+        );
+    } else {
+        // Number
+        return getNum();
+    }
+}

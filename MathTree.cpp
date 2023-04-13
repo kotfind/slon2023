@@ -1,7 +1,5 @@
 #include "MathTree.h"
 
-#include "Node.h"
-
 #include <sstream>
 #include <iostream>
 #include <stack>
@@ -110,5 +108,5 @@ std::string MathTree::toTreeString() const {
 }
 
 double MathTree::eval() const {
-
+    return root->eval();
 }
