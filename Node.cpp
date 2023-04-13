@@ -2,17 +2,17 @@
 
 #include <cassert>
 
-Node::Node(char oper, Node* lhs, Node* rhs)
+Node::Node(char oper, std::unique_ptr<Node> lhs, std::unique_ptr<Node> rhs)
   : type(Type::OPER),
     oper(oper),
-    lhsNode(lhs),
-    rhsNode(rhs)
+    lhsNode(std::move(lhs)),
+    rhsNode(std::move(rhs))
 {}
 
-Node::Node(const std::string& func, Node* lhs)
+Node::Node(const std::string& func, std::unique_ptr<Node> lhs)
   : type(Type::FUNC),
     func(func),
-    lhsNode(lhs)
+    lhsNode(std::move(lhs))
 {}
 
 Node::Node(double num)

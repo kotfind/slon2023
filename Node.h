@@ -8,8 +8,8 @@
 
 class Node {
     public:
-        Node(char oper, Node* lhs, Node* rhs);
-        Node(const std::string& func, Node* lhs);
+        Node(char oper, std::unique_ptr<Node> lhs, std::unique_ptr<Node> rhs);
+        Node(const std::string& func, std::unique_ptr<Node> lhs);
         Node(double num);
 
         bool isOper() const;

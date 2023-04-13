@@ -8,7 +8,7 @@
 MathExpr::MathExpr(const std::string& poland) {
     std::stringstream ss(poland);
 
-    std::stack<Node*> st;
+    std::stack<std::unique_ptr<Node>> st;
 
     std::string s;
     while (ss >> s) {
@@ -16,24 +16,24 @@ MathExpr::MathExpr(const std::string& poland) {
             // Operator
             if (st.size() < 2) throw ParseError();
 
-            auto* y = st.top();
+            auto y = std::move(st.top());
             st.pop();
-            auto* x = st.top();
+            auto x = std::move(st.top());
             st.pop();
 
-            st.push(new Node(s[0], x, y));
+            st.push(std::make_unique<Node>(s[0], std::move(x), std::move(y)));
         } else if (Node::isFunction(s)) {
             // Function
             if (st.size() < 1) throw ParseError();
 
-            auto* x = st.top();
+            auto x = std::move(st.top());
             st.pop();
 
-            st.push(new Node(s, x));
+            st.push(std::make_unique<Node>(s, std::move(x)));
         } else {
             // Number
             try {
-                st.push(new Node(std::stod(s)));
+                st.push(std::make_unique<Node>(std::stod(s)));
             } catch(const std::invalid_argument&) {
                 throw ParseError();
             }
@@ -42,7 +42,7 @@ MathExpr::MathExpr(const std::string& poland) {
 
     if (st.size() != 1) throw ParseError();
 
-    root.reset(st.top());
+    root = std::move(st.top());
 }
 
 void MathExpr::printAsTree(std::ostream& out) const {   
