@@ -6,13 +6,13 @@
 
 #include "Node.h"
 
-class MathTree;
+class MathExpr;
 
-std::ostream& operator<<(std::ostream& out, const MathTree& tree);
+std::ostream& operator<<(std::ostream&, const MathExpr&);
 
-class MathTree {
+class MathExpr {
     public:
-        MathTree(const std::string& poland);
+        MathExpr(const std::string& poland);
 
         void printAsTree(std::ostream&) const;
         double eval() const;
@@ -20,5 +20,5 @@ class MathTree {
     private:
         std::unique_ptr<Node> root;
 
-    friend std::ostream& operator<<(std::ostream& out, const MathTree& tree);
+    friend std::ostream& operator<<(std::ostream&, const MathExpr&);
 };

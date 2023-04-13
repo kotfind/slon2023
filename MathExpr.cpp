@@ -1,9 +1,9 @@
-#include "MathTree.h"
+#include "MathExpr.h"
 
 #include <sstream>
 #include <stack>
 
-MathTree::MathTree(const std::string& poland) {
+MathExpr::MathExpr(const std::string& poland) {
     std::stringstream ss(poland);
 
     std::stack<Node*> st;
@@ -33,15 +33,15 @@ MathTree::MathTree(const std::string& poland) {
     root.reset(st.top());
 }
 
-void MathTree::printAsTree(std::ostream& out) const {   
+void MathExpr::printAsTree(std::ostream& out) const {   
     return root->printAsTree(out);
 }
 
-double MathTree::eval() const {
+double MathExpr::eval() const {
     return root->eval();
 }
 
-std::ostream& operator<<(std::ostream& out, const MathTree& tree) {
-    out << *tree.root;
+std::ostream& operator<<(std::ostream& out, const MathExpr& expr) {
+    out << *expr.root;
     return out;
 }
