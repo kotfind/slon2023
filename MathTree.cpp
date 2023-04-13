@@ -36,11 +36,50 @@ MathTree::MathTree(const std::string& poland) {
     root.reset(st.top());
 }
 
-std::string MathTree::toString() const {
+static std::string nodeToString(Node* node) {
+    if (node->isFunc()) {
+        // Function
+        return node->getFunc() +
+            "(" +
+            nodeToString(node->getLhsNode()) +
+            ")";
+    } else if (node->isOper()) {
+        // Operator
+        std::stringstream ss;
 
+        // Lhs
+        if (node->getLhsNode()->isOper()) {
+            ss << "(";
+        }
+        ss << nodeToString(node->getLhsNode());
+        if (node->getLhsNode()->isOper()) {
+            ss << ")";
+        }
+
+        // Oper
+        ss << " " << node->getOper() << " ";
+
+        // Rhs
+        if (node->getRhsNode()->isOper()) {
+            ss << "(";
+        }
+        ss << nodeToString(node->getRhsNode());
+        if (node->getRhsNode()->isOper()) {
+            ss << ")";
+        }
+
+        return ss.str();
+    } else {
+        // Number
+        return std::to_string(node->getNum());
+    }
 }
 
-static void nodeToString(std::string& ans, Node* node, int depth = 0) {
+std::string MathTree::toString() const {
+    return nodeToString(root.get());
+}
+
+static void nodeToTreeString(std::string& ans, Node* node, int depth = 0) {
     std::string indentString;
     for (int i = 0; i < depth - 1; ++i) {
         indentString += "|   ";
@@ -52,12 +91,12 @@ static void nodeToString(std::string& ans, Node* node, int depth = 0) {
     if (node->isFunc()) {
         // Function
         ans += indentString + node->getFunc() + '\n';
-        nodeToString(ans, node->getLhsNode(), depth + 1);
+        nodeToTreeString(ans, node->getLhsNode(), depth + 1);
     } else if (node->isOper()) {
         // Operator
         ans += indentString + "(" + node->getOper() + ")" + '\n';
-        nodeToString(ans, node->getLhsNode(), depth + 1);
-        nodeToString(ans, node->getRhsNode(), depth + 1);
+        nodeToTreeString(ans, node->getLhsNode(), depth + 1);
+        nodeToTreeString(ans, node->getRhsNode(), depth + 1);
     } else {
         // Number
         ans += indentString + std::to_string(node->getNum()) + '\n';
@@ -66,7 +105,7 @@ static void nodeToString(std::string& ans, Node* node, int depth = 0) {
 
 std::string MathTree::toTreeString() const {   
     std::string ans;
-    nodeToString(ans, root.get());
+    nodeToTreeString(ans, root.get());
     return ans;
 }
 
