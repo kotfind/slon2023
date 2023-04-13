@@ -13,4 +13,6 @@ add_executable(poland
     MathExpr.cpp
     Node.cpp
     functionList.cpp
+
+    ParseError.cpp
 )
