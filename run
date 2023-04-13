@@ -1,0 +1,12 @@
+#!/bin/bash
+
+set -e
+
+mkdir -p build
+cd build
+cmake \
+    -DCMAKE_CXX_COMPILER_LAUNCHER="ccache;distcc" \
+    -DCMAKE_BUILD_TYPE=Debug \
+    ..
+cmake --build . -- -j
+./poland
