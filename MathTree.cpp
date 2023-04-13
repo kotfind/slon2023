@@ -42,8 +42,11 @@ std::string MathTree::toString() const {
 
 static void nodeToString(std::string& ans, Node* node, int depth = 0) {
     std::string indentString;
-    for (int i = 0; i < 4 * depth; ++i) {
-        indentString += ' ';
+    for (int i = 0; i < depth - 1; ++i) {
+        indentString += "|   ";
+    }
+    if (depth) {
+        indentString += "|--- ";
     }
 
     if (node->isFunc()) {
@@ -52,7 +55,7 @@ static void nodeToString(std::string& ans, Node* node, int depth = 0) {
         nodeToString(ans, node->getLhsNode(), depth + 1);
     } else if (node->isOper()) {
         // Operator
-        ans += indentString + node->getOper() + '\n';
+        ans += indentString + "(" + node->getOper() + ")" + '\n';
         nodeToString(ans, node->getLhsNode(), depth + 1);
         nodeToString(ans, node->getRhsNode(), depth + 1);
     } else {
