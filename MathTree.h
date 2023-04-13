@@ -1,8 +1,9 @@
 #pragma once
 
 #include <string>
+#include <memory>
 
-class Node;
+#include "Node.h"
 
 class MathTree {
     public:
@@ -13,5 +14,5 @@ class MathTree {
         double eval() const;
 
     private:
-        Node* root = nullptr;
+        std::unique_ptr<Node> root;
 };

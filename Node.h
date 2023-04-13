@@ -1,6 +1,9 @@
+#pragma once
+
 #include <map>
 #include <functional>
 #include <string>
+#include <memory>
 
 class Node {
     public:
@@ -35,8 +38,8 @@ class Node {
         std::string func;   // for type == FUNC only
         double num;         // for type == NUM only
 
-        Node* lhsNode;      // for type == OPER or FUNC
-        Node* rhsNode;      // for type == FUNC
+        std::unique_ptr<Node> lhsNode;  // for type == OPER or FUNC
+        std::unique_ptr<Node> rhsNode;  // for type == FUNC
 
         static const std::map<char, std::function<double(double, double)>> operators;
         static const std::map<std::string, std::function<double(double)>> functions;

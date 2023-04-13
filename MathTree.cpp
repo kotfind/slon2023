@@ -33,7 +33,7 @@ MathTree::MathTree(const std::string& poland) {
         }
     }
 
-    root = st.top();
+    root.reset(st.top());
 }
 
 std::string MathTree::toString() const {
@@ -66,7 +66,7 @@ static void nodeToString(std::string& ans, Node* node, int depth = 0) {
 
 std::string MathTree::toTreeString() const {   
     std::string ans;
-    nodeToString(ans, root);
+    nodeToString(ans, root.get());
     return ans;
 }
 

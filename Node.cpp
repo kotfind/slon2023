@@ -41,12 +41,12 @@ double Node::getNum() const {
 
 Node* Node::getLhsNode() const {
     assert(isFunc() || isOper());
-    return lhsNode;
+    return lhsNode.get();
 }
 
 Node* Node::getRhsNode() const {
     assert(isOper());
-    return rhsNode;
+    return rhsNode.get();
 }
 
 bool Node::isFunction(const std::string& s) {
