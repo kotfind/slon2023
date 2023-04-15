@@ -10,5 +10,5 @@ set(CMAKE_CXX_FLAGS_DEBUG "-fsanitize=undefined,address -g3 -O0")
 add_executable(cards
     main.cpp
 
-    main.cpp
+    AhoCorasic.cpp
 )
