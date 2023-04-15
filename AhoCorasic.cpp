@@ -61,7 +61,7 @@ std::vector<int> AhoCorasic::getWordIds(Node* v) {
     return ans;
 }
 
-std::vector<std::vector<int>> AhoCorasic::process(const std::string& text) {
+std::vector<std::vector<int>> AhoCorasic::process(const std::string& text, bool endPos) {
     std::vector<std::vector<int>> ans(text.size());
 
     Node* cur = root.get();
@@ -71,8 +71,10 @@ std::vector<std::vector<int>> AhoCorasic::process(const std::string& text) {
 
         auto wordIds = getWordIds(cur);
         for (auto id : wordIds) {
-            int startPos = i - wordLengths[id] + 1;
-            ans[startPos].push_back(id);
+            int pos = endPos
+                ? i // position of word's end
+                : i - wordLengths[id] + 1; // position of word's start
+            ans[pos].push_back(id);
         }
     }
 

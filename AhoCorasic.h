@@ -22,8 +22,8 @@ class AhoCorasic {
         void prepare();
 
         // for each position returns
-        // numbers of string starting here
-        std::vector<std::vector<int>> process(const std::string& text);
+        // numbers of string starting/ending here
+        std::vector<std::vector<int>> process(const std::string& text, bool endPos = false);
 
     private:
         Node* go(Node* v, char c);
