@@ -13,10 +13,12 @@ class Matcher {
         void process();
 
         bool hasMatch() const { return match; }
+        std::vector<std::pair<int, int>> getMatchSegments() const { return matchSegments; }
 
     private:
         std::string pattern;
         std::string text;
 
         bool match;
+        std::vector<std::pair<int, int>> matchSegments;
 };

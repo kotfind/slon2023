@@ -5,6 +5,7 @@
 #include <memory>
 #include <algorithm>
 #include <iostream>
+#include <optional>
 
 #define ALL(v) v.begin(), v.end()
 
@@ -48,16 +49,24 @@ static std::vector<std::string> split(const std::string& s, char delim) {
 }
 
 void Matcher::process() {
+    matchSegments.clear();
+
     // Split pattern by *
     auto parts = split(pattern, '*');
 
     // Check prefix
+    std::optional<std::pair<int, int>> firstMatchSegment = std::nullopt;
+    int deletedPrefixLength = 0;
     if (pattern.front() != '*') {
         if (!startsWith(text, parts.front())) {
             match = false;
             return;
         }
-        text.erase(0, parts.front().size());
+
+        deletedPrefixLength = parts.front().size();
+        firstMatchSegment = {0, deletedPrefixLength - 1};
+
+        text.erase(0, deletedPrefixLength);
         parts.erase(parts.begin());
     }
 
@@ -67,12 +76,18 @@ void Matcher::process() {
     }
 
     // Check suffix
+    std::optional<std::pair<int, int>> lastMatchSegment = std::nullopt;
     if (pattern.back() != '*') {
         if (!endsWith(text, parts.back())) {
             match = false;
             return;
         }
         int n = parts.back().size();
+        lastMatchSegment = {
+            text.size() - n + deletedPrefixLength,
+            text.size() - 1 + deletedPrefixLength
+        };
+
         text.erase(text.size() - n, text.size());
         parts.pop_back();
     }
@@ -101,16 +116,46 @@ void Matcher::process() {
     // could be put into first i symbols of text
     std::vector<int> dp(text.size());
 
+    // pr[i] is j if (dp[i] was calculateded from dp[j])
+    // or -1 otherwise
+    std::vector<int> pr(text.size(), -1);
+
     dp[0] = std::count(ALL(partsByEndPos[0]), 0);
     for (int i = 1; i < text.size(); ++i) {
         dp[i] = dp[i - 1];
         for (int p : partsByEndPos[i]) {
             int startPos = i - parts[p].size() + 1;
-            if (dp[startPos] == p) {
-                dp[i] = std::max(dp[i], p + 1);
+            if (dp[startPos] == p && p + 1 > dp[i]) {  // XXX startPos - 1
+                pr[i] = startPos;
+                dp[i] = p + 1;
             }
         }
     }
 
     match = dp.back() == parts.size();
+    if (!match) return;
+
+    // Calculate matchSegments
+    if (lastMatchSegment.has_value()) {
+        matchSegments.push_back(*lastMatchSegment);
+    }
+
+    int cur = (int)text.size() - 1;
+    while (cur >= 0) {
+        if (pr[cur] == -1) {
+            --cur;
+        } else {
+            matchSegments.push_back({
+                pr[cur] + deletedPrefixLength,
+                cur + deletedPrefixLength
+            });
+            cur = pr[cur] - 1;
+        }
+    }
+
+    if (firstMatchSegment.has_value()) {
+        matchSegments.push_back(*firstMatchSegment);
+    }
+
+    std::reverse(ALL(matchSegments));
 }
