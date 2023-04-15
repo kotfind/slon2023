@@ -28,13 +28,11 @@ static bool startsWith(const std::string& str, const std::string& prefix) {
         str.compare(0, prefix.size(), prefix) == 0;
 }
 
-void Matcher::process() {
-    // Split pattern by *
+static std::vector<std::string> split(const std::string& s, char delim) {
     std::string buf;
     std::vector<std::string> parts;
-    for (int i = 0; i < pattern.size(); ++i) {
-        char c = pattern[i];
-        if (c == '*') {
+    for (char c : s) {
+        if (c == delim) {
             if (!buf.empty()) {
                 parts.push_back(buf);
                 buf.clear();
@@ -45,8 +43,13 @@ void Matcher::process() {
     }
     if (!buf.empty()) {
         parts.push_back(buf);
-        buf.clear();
     }
+    return parts;
+}
+
+void Matcher::process() {
+    // Split pattern by *
+    auto parts = split(pattern, '*');
 
     // Check prefix
     if (pattern.front() != '*') {
