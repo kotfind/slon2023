@@ -1,12 +1,15 @@
 #pragma once
 
+#include "Polygon.h"
+
 #include <QMainWindow>
 #include <memory>
-
-#include "Polygon.h"
+#include <QGraphicsView>
+#include <QGraphicsScene>
 
 class PolygonModel;
 class EditableTableWidget;
+class PolygonGraphicsItem;
 
 class MainWindow : public QMainWindow {
     public:
@@ -19,4 +22,8 @@ class MainWindow : public QMainWindow {
         std::unique_ptr<Polygon> poly;
         PolygonModel* polyModel;
         EditableTableWidget* polyWidget;
+        PolygonGraphicsItem* polyItem;
+
+        QGraphicsView* graphicsView;
+        QGraphicsScene* graphicsScene;
 };

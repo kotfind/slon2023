@@ -21,8 +21,10 @@ add_executable(polygons
 
     Polygon.cpp
     PolygonModel.cpp
+    PolygonGraphicsItem.cpp
 
     EditableTableWidget.cpp
+
 )
 
 target_link_libraries(polygons

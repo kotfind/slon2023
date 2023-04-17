@@ -3,6 +3,7 @@
 #include "Polygon.h"
 #include "PolygonModel.h"
 #include "EditableTableWidget.h"
+#include "PolygonGraphicsItem.h"
 
 #include <QDockWidget>
 
@@ -13,20 +14,27 @@ MainWindow::MainWindow(QWidget* parent)
     createUi();
     createDocks();
 
-    poly->append({0, 5});
-    poly->append({1, 0});
-    poly->append({2, 2});
-    poly->append({-1, 1});
-    poly->append({3, 2});
-    poly->append({1, 0});
+    poly->append({ 300,  200});
+    poly->append({ 100,  100});
+    poly->append({ 200,  400});
+    poly->append({-100,  300});
+    poly->append({-100,  400});
+    poly->append({-300,  100});
+    poly->append({-100, -300});
 
     polyModel = new PolygonModel(poly.get(), this);
     polyWidget->setModel(polyModel);
+
+    graphicsScene = new QGraphicsScene(this);
+    graphicsView->setScene(graphicsScene);
+
+    polyItem = new PolygonGraphicsItem(poly.get());
+    graphicsScene->addItem(polyItem);
 }
 
 void MainWindow::createUi() {
-    auto* dummy = new QWidget(this);
-    setCentralWidget(dummy);
+    graphicsView = new QGraphicsView(this);
+    setCentralWidget(graphicsView);
 }
 
 void MainWindow::createDocks() {
