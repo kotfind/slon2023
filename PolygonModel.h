@@ -5,6 +5,8 @@
 #include <QAbstractTableModel>
 
 class PolygonModel : public QAbstractTableModel {
+    Q_OBJECT
+
     public:
         PolygonModel(Polygon* poly, QObject* parent = nullptr);
 
@@ -22,4 +24,10 @@ class PolygonModel : public QAbstractTableModel {
 
     private:
         Polygon* poly;
+
+    signals:
+        void changed();
+
+    public slots:
+        void update();
 };

@@ -30,6 +30,20 @@ MainWindow::MainWindow(QWidget* parent)
 
     polyItem = new PolygonGraphicsItem(poly.get());
     graphicsScene->addItem(polyItem);
+
+    connect(
+        polyModel,
+        &PolygonModel::changed,
+        polyItem,
+        &PolygonGraphicsItem::update
+    );
+
+    connect(
+        polyItem,
+        &PolygonGraphicsItem::changed,
+        polyModel,
+        &PolygonModel::update
+    );
 }
 
 void MainWindow::createUi() {

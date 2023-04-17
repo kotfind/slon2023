@@ -9,14 +9,14 @@ PolygonGraphicsItem::PolygonGraphicsItem(
     Polygon* poly,
     QGraphicsItem* parent
 ) : poly(poly),
-    QGraphicsItem(parent)
+    QGraphicsObject(parent)
 {
-    
+    update();
 }
 
 QRectF PolygonGraphicsItem::boundingRect() const {
     QRectF ans;
-    for (const auto& pt : *poly) {
+    for (const auto& pt : points) {
         int sz = 1;
         ans = ans.united(QRectF(
             pt.x() - sz,
@@ -31,8 +31,17 @@ QRectF PolygonGraphicsItem::boundingRect() const {
 void PolygonGraphicsItem::paint(QPainter* qp, const QStyleOptionGraphicsItem*, QWidget*) {
     QPainterPath path;
     path.moveTo(poly->last());
-    for (const auto& pt : *poly) {
+    for (const auto& pt : points) {
         path.lineTo(pt);
     }
     qp->fillPath(path, Qt::red);
+}
+
+void PolygonGraphicsItem::update() {
+    prepareGeometryChange();
+    points.clear();
+    for (const auto& pt : *poly) {
+        points << pt;
+    }
+    QGraphicsObject::update();
 }

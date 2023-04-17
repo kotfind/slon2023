@@ -50,14 +50,18 @@ bool PolygonModel::setData(const QModelIndex& index, const QVariant& value, int 
     switch (index.column()) {
         case 0:
             (*poly)[index.row()].setX(val);
-            return true;
+            break;
 
         case 1:
             (*poly)[index.row()].setY(val);
-            return true;
+            break;
+
+        default:
+            return false;
     }
 
-    return false;
+    emit changed();
+    return true;
 }
 
 Qt::ItemFlags PolygonModel::flags(const QModelIndex& index) const {
@@ -71,6 +75,7 @@ bool PolygonModel::insertRows(int row, int count, const QModelIndex& parent) {
     poly->insert(row, count, {0, 0});
     endInsertRows();
 
+    emit changed();
     return true;
 }
 
@@ -83,5 +88,11 @@ bool PolygonModel::removeRows(int row, int count, const QModelIndex& parent) {
     poly->remove(row, count);
     endRemoveRows();
 
+    emit changed();
     return true;
+}
+
+void PolygonModel::update() {
+    beginResetModel();
+    endResetModel();
 }

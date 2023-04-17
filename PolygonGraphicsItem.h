@@ -1,12 +1,14 @@
 #pragma once
 
-#include <QGraphicsItem>
+#include <QGraphicsObject>
 #include <QRectF>
 #include <QList>
 
 class Polygon;
 
-class PolygonGraphicsItem : public QGraphicsItem {
+class PolygonGraphicsItem : public QGraphicsObject {
+    Q_OBJECT
+
     public:
         PolygonGraphicsItem(Polygon* poly, QGraphicsItem* parent = nullptr);
 
@@ -15,4 +17,12 @@ class PolygonGraphicsItem : public QGraphicsItem {
 
     private:
         Polygon* poly;
+
+        QList<QPointF> points;
+
+    signals:
+        void changed();
+
+    public slots:
+        void update();
 };
