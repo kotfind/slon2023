@@ -6,6 +6,9 @@
 #include <QPainter>
 #include <QPainterPath>
 #include <QDebug>
+#include <QPen>
+#include <QBrush>
+#include <QColor>
 
 PolygonGraphicsItem::PolygonGraphicsItem(
     Polygon* poly,
@@ -26,7 +29,21 @@ void PolygonGraphicsItem::paint(QPainter* qp, const QStyleOptionGraphicsItem*, Q
     for (auto* pt : points) {
         path.lineTo(pt->pos());
     }
-    qp->fillPath(path, Qt::red);
+
+    auto pen = qp->pen();
+    pen.setColor(Qt::red);
+    pen.setWidthF(penWidth);
+    pen.setCosmetic(false);
+    qp->setPen(pen);
+
+    auto brush = qp->brush();
+    auto color = QColor(Qt::red);
+    color.setAlphaF(0.5);
+    brush.setColor(color);
+    brush.setStyle(Qt::SolidPattern);
+    qp->setBrush(brush);
+
+    qp->drawPath(path);
 }
 
 void PolygonGraphicsItem::update() {

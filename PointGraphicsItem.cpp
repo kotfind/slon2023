@@ -25,8 +25,8 @@ QRectF PointGraphicsItem::boundingRect() const {
 }
 
 void PointGraphicsItem::paint(QPainter* qp, const QStyleOptionGraphicsItem*, QWidget*) {
-    qp->setPen(QPen(Qt::black, Qt::NoPen));
-    qp->setBrush(Qt::blue);
+    qp->setPen(QPen(Qt::black, Qt::SolidLine));
+    qp->setBrush(Qt::NoBrush);
     qp->drawEllipse(getRect());
 }
 

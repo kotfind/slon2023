@@ -23,6 +23,8 @@ class PolygonGraphicsItem : public QGraphicsObject {
 
         QList<PointGraphicsItem*> points;
 
+        static constexpr double penWidth = 5;
+
     signals:
         void changed();
 

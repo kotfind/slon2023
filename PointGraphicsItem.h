@@ -16,5 +16,5 @@ class PointGraphicsItem : public QGraphicsItem {
     private:
         QRectF getRect() const;
 
-        static constexpr double radius = 5;
+        static constexpr double radius = 10;
 };
