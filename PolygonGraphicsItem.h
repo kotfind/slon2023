@@ -16,6 +16,8 @@ class PolygonGraphicsItem : public QGraphicsObject {
         QRectF boundingRect() const override;
         void paint(QPainter* qp, const QStyleOptionGraphicsItem*, QWidget*) override;
 
+        void pointMoved(PointGraphicsItem* point);
+
     private:
         Polygon* poly;
 

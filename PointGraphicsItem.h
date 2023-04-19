@@ -11,6 +11,8 @@ class PointGraphicsItem : public QGraphicsItem {
         QRectF boundingRect() const override;
         void paint(QPainter* qp, const QStyleOptionGraphicsItem*, QWidget*) override;
 
+        QVariant itemChange(GraphicsItemChange change, const QVariant &value) override;
+
     private:
         QRectF getRect() const;
 

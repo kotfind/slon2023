@@ -5,6 +5,7 @@
 
 #include <QPainter>
 #include <QPainterPath>
+#include <QDebug>
 
 PolygonGraphicsItem::PolygonGraphicsItem(
     Polygon* poly,
@@ -30,14 +31,32 @@ void PolygonGraphicsItem::paint(QPainter* qp, const QStyleOptionGraphicsItem*, Q
 
 void PolygonGraphicsItem::update() {
     prepareGeometryChange();
+
     for (auto* pt : points) {
         delete pt;
     }
     points.clear();
+
     for (const auto& pt : *poly) {
         auto* point = new PointGraphicsItem(this);
         point->setPos(mapFromScene(pt));
+        point->setFlags(
+            point->flags() |
+            QGraphicsItem::ItemIsMovable |
+            QGraphicsItem::ItemSendsGeometryChanges
+        );
         points << point;
     }
+
     QGraphicsObject::update();
+}
+
+void PolygonGraphicsItem::pointMoved(PointGraphicsItem* point) {
+    prepareGeometryChange();
+
+    auto i = points.indexOf(point);
+    (*poly)[i] = mapToScene(point->pos());
+
+    QGraphicsObject::update();
+    emit changed();
 }
