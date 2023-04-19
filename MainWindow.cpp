@@ -9,51 +9,57 @@
 
 MainWindow::MainWindow(QWidget* parent)
   : QMainWindow(parent),
-    poly(std::make_unique<Polygon>())
+    polys{
+        std::make_unique<Polygon>(),
+        std::make_unique<Polygon>()
+    }
 {
-    createUi();
-    createDocks();
+    graphicsView = new QGraphicsView(this);
+    setCentralWidget(graphicsView);
 
-    poly->append({ 300,  200});
-    poly->append({ 100,  100});
-    poly->append({ 200,  400});
-    poly->append({-100,  300});
-    poly->append({-100,  400});
-    poly->append({-300,  100});
-    poly->append({-100, -300});
+    polys[0]->append({ 300,  200});
+    polys[0]->append({ 100,  100});
+    polys[0]->append({ 200,  400});
+    polys[0]->append({-100,  300});
+    polys[0]->append({-100,  400});
+    polys[0]->append({-300,  100});
+    polys[0]->append({-100, -300});
 
-    polyModel = new PolygonModel(poly.get(), this);
-    polyWidget->setModel(polyModel);
+    polys[1]->append({ 200,  300});
+    polys[1]->append({ 100,  100});
+    polys[1]->append({ 400,  200});
+    polys[1]->append({ 300, -100});
+    polys[1]->append({ 400, -100});
+    polys[1]->append({ 100, -300});
+    polys[1]->append({-300, -100});
 
     graphicsScene = new QGraphicsScene(this);
     graphicsView->setScene(graphicsScene);
 
-    polyItem = new PolygonGraphicsItem(poly.get());
-    graphicsScene->addItem(polyItem);
+    for (int i = 0; i < 2; ++i) {
+        auto* dock = new QDockWidget(tr("Polygon %1").arg(i + 1), this);
+        polyWidgets[i] = new EditableTableWidget(this);
+        dock->setWidget(polyWidgets[i]);
+        addDockWidget(Qt::RightDockWidgetArea, dock);
 
-    connect(
-        polyModel,
-        &PolygonModel::changed,
-        polyItem,
-        &PolygonGraphicsItem::update
-    );
+        polyModels[i] = new PolygonModel(polys[i].get(), this);
+        polyWidgets[i]->setModel(polyModels[i]);
 
-    connect(
-        polyItem,
-        &PolygonGraphicsItem::changed,
-        polyModel,
-        &PolygonModel::update
-    );
-}
+        polyItems[i] = new PolygonGraphicsItem(polys[i].get());
+        graphicsScene->addItem(polyItems[i]);
 
-void MainWindow::createUi() {
-    graphicsView = new QGraphicsView(this);
-    setCentralWidget(graphicsView);
-}
+        connect(
+            polyModels[i],
+            &PolygonModel::changed,
+            polyItems[i],
+            &PolygonGraphicsItem::update
+        );
 
-void MainWindow::createDocks() {
-    auto* dock = new QDockWidget(tr("Polygon"), this);
-    polyWidget = new EditableTableWidget(this);
-    dock->setWidget(polyWidget);
-    addDockWidget(Qt::RightDockWidgetArea, dock);
+        connect(
+            polyItems[i],
+            &PolygonGraphicsItem::changed,
+            polyModels[i],
+            &PolygonModel::update
+        );
+    }
 }

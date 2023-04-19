@@ -16,13 +16,10 @@ class MainWindow : public QMainWindow {
         MainWindow(QWidget* parent = nullptr);
 
     private:
-        void createUi();
-        void createDocks();
-
-        std::unique_ptr<Polygon> poly;
-        PolygonModel* polyModel;
-        EditableTableWidget* polyWidget;
-        PolygonGraphicsItem* polyItem;
+        std::unique_ptr<Polygon> polys[2];
+        PolygonModel* polyModels[2];
+        EditableTableWidget* polyWidgets[2];
+        PolygonGraphicsItem* polyItems[2];
 
         QGraphicsView* graphicsView;
         QGraphicsScene* graphicsScene;
