@@ -1,6 +1,7 @@
 #include "PolygonGraphicsItem.h"
 
 #include "Polygon.h"
+#include "PointGraphicsItem.h"
 
 #include <QPainter>
 #include <QPainterPath>
@@ -15,33 +16,28 @@ PolygonGraphicsItem::PolygonGraphicsItem(
 }
 
 QRectF PolygonGraphicsItem::boundingRect() const {
-    QRectF ans;
-    for (const auto& pt : points) {
-        int sz = 1;
-        ans = ans.united(QRectF(
-            pt.x() - sz,
-            pt.y() - sz,
-            2 * sz,
-            2 * sz
-        ));
-    }
-    return ans;
+    return childrenBoundingRect();
 }
 
 void PolygonGraphicsItem::paint(QPainter* qp, const QStyleOptionGraphicsItem*, QWidget*) {
     QPainterPath path;
-    path.moveTo(poly->last());
-    for (const auto& pt : points) {
-        path.lineTo(pt);
+    path.moveTo(points.last()->pos());
+    for (auto* pt : points) {
+        path.lineTo(pt->pos());
     }
     qp->fillPath(path, Qt::red);
 }
 
 void PolygonGraphicsItem::update() {
     prepareGeometryChange();
+    for (auto* pt : points) {
+        delete pt;
+    }
     points.clear();
     for (const auto& pt : *poly) {
-        points << pt;
+        auto* point = new PointGraphicsItem(this);
+        point->setPos(mapFromScene(pt));
+        points << point;
     }
     QGraphicsObject::update();
 }

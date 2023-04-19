@@ -5,6 +5,7 @@
 #include <QList>
 
 class Polygon;
+class PointGraphicsItem;
 
 class PolygonGraphicsItem : public QGraphicsObject {
     Q_OBJECT
@@ -18,7 +19,7 @@ class PolygonGraphicsItem : public QGraphicsObject {
     private:
         Polygon* poly;
 
-        QList<QPointF> points;
+        QList<PointGraphicsItem*> points;
 
     signals:
         void changed();
