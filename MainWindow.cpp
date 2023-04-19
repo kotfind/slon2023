@@ -59,10 +59,48 @@ MainWindow::MainWindow(QWidget* parent)
         );
 
         connect(
+            polyModels[i],
+            &PolygonModel::changed,
+            this,
+            &MainWindow::onPolygonChanged
+        );
+
+        connect(
             polyItems[i],
             &PolygonGraphicsItem::changed,
             polyModels[i],
             &PolygonModel::update
         );
+
+        connect(
+            polyItems[i],
+            &PolygonGraphicsItem::changed,
+            this,
+            &MainWindow::onPolygonChanged
+        );
+    }
+
+    onPolygonChanged();
+}
+
+void MainWindow::onPolygonChanged() {
+    // Clear old
+    for (auto* item : intersectionItems) {
+        graphicsScene->removeItem(item);
+        delete item;
+    }
+    intersectionItems.clear();
+    intersection.clear();
+
+    // Generate new
+    intersection = intersect(*polys[0], *polys[1]);
+    for (auto& poly : intersection) {
+        auto* item = new PolygonGraphicsItem(
+            &poly,
+            Qt::green,
+            true /* readonly */
+        );
+        graphicsScene->addItem(item);
+        intersectionItems.append(item);
     }
 }

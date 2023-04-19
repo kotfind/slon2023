@@ -13,10 +13,12 @@
 PolygonGraphicsItem::PolygonGraphicsItem(
     Polygon* poly,
     const QColor& color,
+    bool readonly,
     QGraphicsItem* parent
 ) : QGraphicsObject(parent),
     poly(poly),
-    color(color)
+    color(color),
+    readonly(readonly)
 {
     update();
 }
@@ -59,11 +61,13 @@ void PolygonGraphicsItem::update() {
     for (const auto& pt : *poly) {
         auto* point = new PointGraphicsItem(this);
         point->setPos(mapFromScene(pt));
-        point->setFlags(
-            point->flags() |
-            QGraphicsItem::ItemIsMovable |
-            QGraphicsItem::ItemSendsGeometryChanges
-        );
+        if (!readonly) {
+            point->setFlags(
+                point->flags() |
+                QGraphicsItem::ItemIsMovable |
+                QGraphicsItem::ItemSendsGeometryChanges
+            );
+        }
         points << point;
     }
 
@@ -78,4 +82,8 @@ void PolygonGraphicsItem::pointMoved(PointGraphicsItem* point) {
 
     QGraphicsObject::update();
     emit changed();
+}
+
+bool PolygonGraphicsItem::isReadOnly() {
+    return readonly;
 }

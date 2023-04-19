@@ -25,9 +25,11 @@ QRectF PointGraphicsItem::boundingRect() const {
 }
 
 void PointGraphicsItem::paint(QPainter* qp, const QStyleOptionGraphicsItem*, QWidget*) {
-    qp->setPen(QPen(Qt::black, Qt::SolidLine));
-    qp->setBrush(Qt::NoBrush);
-    qp->drawEllipse(getRect());
+    if (!static_cast<PolygonGraphicsItem*>(parentItem())->isReadOnly()) {
+        qp->setPen(QPen(Qt::black,Qt::SolidLine));
+        qp->setBrush(Qt::NoBrush);
+        qp->drawEllipse(getRect());
+    }
 }
 
 QVariant PointGraphicsItem::itemChange(GraphicsItemChange change, const QVariant& value) {

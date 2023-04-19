@@ -6,12 +6,15 @@
 #include <memory>
 #include <QGraphicsView>
 #include <QGraphicsScene>
+#include <QList>
 
 class PolygonModel;
 class EditableTableWidget;
 class PolygonGraphicsItem;
 
 class MainWindow : public QMainWindow {
+    Q_OBJECT
+
     public:
         MainWindow(QWidget* parent = nullptr);
 
@@ -23,4 +26,10 @@ class MainWindow : public QMainWindow {
 
         QGraphicsView* graphicsView;
         QGraphicsScene* graphicsScene;
+
+        QList<Polygon> intersection;
+        QList<PolygonGraphicsItem*> intersectionItems;
+
+    private slots:
+        void onPolygonChanged();
 };
