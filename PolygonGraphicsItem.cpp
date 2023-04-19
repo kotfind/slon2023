@@ -12,9 +12,11 @@
 
 PolygonGraphicsItem::PolygonGraphicsItem(
     Polygon* poly,
+    const QColor& color,
     QGraphicsItem* parent
-) : poly(poly),
-    QGraphicsObject(parent)
+) : QGraphicsObject(parent),
+    poly(poly),
+    color(color)
 {
     update();
 }
@@ -31,13 +33,13 @@ void PolygonGraphicsItem::paint(QPainter* qp, const QStyleOptionGraphicsItem*, Q
     }
 
     auto pen = qp->pen();
-    pen.setColor(Qt::red);
+    pen.setColor(this->color);
     pen.setWidthF(penWidth);
     pen.setCosmetic(false);
     qp->setPen(pen);
 
     auto brush = qp->brush();
-    auto color = QColor(Qt::red);
+    auto color = QColor(this->color);
     color.setAlphaF(0.5);
     brush.setColor(color);
     brush.setStyle(Qt::SolidPattern);

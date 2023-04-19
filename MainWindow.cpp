@@ -45,7 +45,10 @@ MainWindow::MainWindow(QWidget* parent)
         polyModels[i] = new PolygonModel(polys[i].get(), this);
         polyWidgets[i]->setModel(polyModels[i]);
 
-        polyItems[i] = new PolygonGraphicsItem(polys[i].get());
+        polyItems[i] = new PolygonGraphicsItem(
+            polys[i].get(),
+            i == 0 ? Qt::red : Qt::blue
+        );
         graphicsScene->addItem(polyItems[i]);
 
         connect(

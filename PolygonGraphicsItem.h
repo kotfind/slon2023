@@ -3,6 +3,7 @@
 #include <QGraphicsObject>
 #include <QRectF>
 #include <QList>
+#include <QColor>
 
 class Polygon;
 class PointGraphicsItem;
@@ -11,7 +12,7 @@ class PolygonGraphicsItem : public QGraphicsObject {
     Q_OBJECT
 
     public:
-        PolygonGraphicsItem(Polygon* poly, QGraphicsItem* parent = nullptr);
+        PolygonGraphicsItem(Polygon* poly, const QColor& color, QGraphicsItem* parent = nullptr);
 
         QRectF boundingRect() const override;
         void paint(QPainter* qp, const QStyleOptionGraphicsItem*, QWidget*) override;
@@ -24,6 +25,8 @@ class PolygonGraphicsItem : public QGraphicsObject {
         QList<PointGraphicsItem*> points;
 
         static constexpr double penWidth = 5;
+
+        QColor color;
 
     signals:
         void changed();
