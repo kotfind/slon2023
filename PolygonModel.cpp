@@ -71,8 +71,15 @@ Qt::ItemFlags PolygonModel::flags(const QModelIndex& index) const {
 bool PolygonModel::insertRows(int row, int count, const QModelIndex& parent) {
     if (parent.isValid()) return false;
 
+    auto prev = row == 0
+        ? poly->last()
+        : (*poly)[row - 1];
+    auto next = row == poly->size()
+        ? poly->first()
+        : (*poly)[row];
+
     beginInsertRows(parent, row, row + count - 1);
-    poly->insert(row, count, {0, 0});
+    poly->insert(row, count, (prev + next) / 2);
     endInsertRows();
 
     emit changed();
